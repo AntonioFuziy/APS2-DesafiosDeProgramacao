@@ -71,9 +71,27 @@ void fft_inverse(double complex t[MAX_SIZE], double complex s[MAX_SIZE], int n) 
 }
 
 void fft_forward_2d(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
+    int l = 0;
+    int c = 0;
+
+    for(l = 0; l < width; l++){
+        fft_forward(matrix[l], matrix[c], width);
+        for(c = 0; c < height; c++){
+            fft_forward(matrix[c], matrix[l], height);
+        }
+    }
 }
 
 void fft_inverse_2d(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
+    int l = 0;
+    int c = 0;
+
+    for(l = 0; l < width; l++){
+        fft_inverse(matrix[l], matrix[c], width);
+        for(c = 0; c < height; c++){
+            fft_inverse(matrix[c], matrix[l], height);
+        }
+    }
 }
 
 void filter(double complex input[MAX_SIZE][MAX_SIZE], double complex output[MAX_SIZE][MAX_SIZE], int width, int height, int flip) {
