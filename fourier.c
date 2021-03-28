@@ -70,26 +70,78 @@ void fft_inverse(double complex t[MAX_SIZE], double complex s[MAX_SIZE], int n) 
     }
 }
 
-void fft_forward_2d(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
-    int l = 0;
-    int c = 0;
+// void calculate_matrix_lines(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height, double complex fourier_vector[], int line){
+//     for(int i = 0; i < width; i++){
+//         matrix[line][i] = fourier_vector[i];
+//     }
+// }
 
-    for(l = 0; l < width; l++){
-        fft_forward(matrix[l], matrix[c], width);
-        for(c = 0; c < height; c++){
-            fft_forward(matrix[c], matrix[l], height);
+// void calculate_matrix_columns(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height, double complex fourier_vector[], int column){
+//     for(int i = 0; i < height; i++){
+//         matrix[i][column] = fourier_vector[i];
+//     }
+// }
+
+void fft_forward_2d(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
+    for(int l = 0; l < height; l++){
+        double complex line[width];
+        double complex fourier_line[width];
+
+        for(int i = 0; i < width; i++){
+            line[i] = matrix[l][i];
+        }
+
+        fft_forward(line, fourier_line, width);
+
+        for(int a = 0; a < width; a++){
+            matrix[l][a] = fourier_line[a];
+        }
+    }
+
+    for(int c = 0; c < width; c++){
+        double complex column[height];
+        double complex fourier_column[height];
+
+        for(int j = 0; j < height; j++){
+            column[j] = matrix[j][c];
+        }
+
+        fft_forward(column, fourier_column, height);        
+
+        for(int b = 0; b < height; b++){
+            matrix[b][c] = fourier_column[b];
         }
     }
 }
 
 void fft_inverse_2d(double complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
-    int l = 0;
-    int c = 0;
+    for(int l = 0; l < height; l++){
+        double complex line[width];
+        double complex fourier_line[width];
 
-    for(l = 0; l < width; l++){
-        fft_inverse(matrix[l], matrix[c], width);
-        for(c = 0; c < height; c++){
-            fft_inverse(matrix[c], matrix[l], height);
+        for(int i = 0; i < width; i++){
+            line[i] = matrix[l][i];
+        }
+
+        fft_inverse(line, fourier_line, width);
+
+        for(int a = 0; a < width; a++){
+            matrix[l][a] = fourier_line[a];
+        }
+    }
+
+    for(int c = 0; c < width; c++){
+        double complex column[height];
+        double complex fourier_column[height];
+
+        for(int j = 0; j < height; j++){
+            column[j] = matrix[j][c];
+        }
+
+        fft_inverse(column, fourier_column, height);        
+
+        for(int b = 0; b < height; b++){
+            matrix[b][c] = fourier_column[b];
         }
     }
 }
